@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
 # config
-VERSION=2.4.2
+VERSION=3.0.4
 ITERATION=1
 
 
 # Main stuff
-cd /build || exit 1
+##cd /build || exit 1
+
 # set up functions
 function getcontents {
-    curl -o /tmp/node.tar.xz https://nodejs.org/dist/v6.10.0/node-v6.10.0-linux-x64.tar.xz
+    curl -o /tmp/node.tar.xz https://nodejs.org/dist/v8.11.4/node-v8.11.4-linux-x64.tar.xz
     tar -xvf /tmp/node.tar.xz -C ./slash/opt/pm2 --strip-components=1
     rm /tmp/node.tar.xz
     cd slash/opt/pm2 || exit 1
-    export PATH=/build/slash/opt/pm2/bin/:${PATH}
+    export PATH=${PWD}/bin/:${PATH}
     echo "---- Get pm2 ----"
     ./bin/npm install pm2 -g
+    echo "---- Get yarn ----"
+    ./bin/npm install yarn -g
     cd - || exit 1
 }
 
@@ -76,10 +79,10 @@ fpm -s dir -t rpm -C ./slash/ \
     --iteration ${ITERATION} \
     --after-install 'slash/opt/pm2/extras/after-install.sh' \
     --after-remove 'slash/opt/pm2/extras/after-remove.sh' \
-    --vendor 'sellorm' \
+    --vendor 'vvcao' \
     --license 'GPL v3' \
-    --maintainer 'pm2-pkg@5vcc.com' \
-    --url 'https://github.com/sellorm/pm2-pkg' \
+    --maintainer 'github@vvcao.com' \
+    --url 'https://github.com/githubvvcao/pm2-pkg' \
     --description "Packaged version of the pm2 process manager" .
 
 

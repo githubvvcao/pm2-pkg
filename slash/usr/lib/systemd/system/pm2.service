@@ -1,8 +1,21 @@
 [Unit]
-Description=pm2 Service
+Description=PM2 process manager
+Documentation=https://pm2.keymetrics.io/
+After=network.target
 
 [Service]
-ExecStart=/bin/bash -c "/opt/pm2/extras/pm2-start"
+Type=forking
+User=pm2
+LimitNOFILE=infinity
+LimitNPROC=infinity
+LimitCORE=infinity
+Environment=PATH=/opt/pm2/bin:/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin
+Environment=PM2_HOME=/home/pm2/.pm2
+PIDFile=/home/pm2/.pm2/pm2.pid
+
+ExecStart=/opt/pm2/lib/node_modules/pm2/bin/pm2 resurrect
+ExecReload=/opt/pm2/lib/node_modules/pm2/bin/pm2 reload all
+ExecStop=/opt/pm2/lib/node_modules/pm2/bin/pm2 kill
 
 [Install]
-WantedBy=multiuser.target
+WantedBy=multi-user.target

@@ -3,5 +3,6 @@
 
 # add the pm2 user
 useradd pm2
+systemctl enable pm2
 
 echo 0
